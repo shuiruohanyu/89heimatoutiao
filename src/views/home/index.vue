@@ -22,13 +22,10 @@
 </template>
 
 <script>
-import layoutAside from '../../components/home/layout-aside' // 引入
-import layoutHeader from '../../components/home/layout-header' // 引入
 
 export default {
   components: {
-    'layout-aside': layoutAside,
-    'layout-header': layoutHeader
+
   }
 }
 </script>

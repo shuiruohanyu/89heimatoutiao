@@ -43,6 +43,7 @@ export default {
 <style lang='less' scoped>
 .layout-aside {
     width: 230px;
+    overflow: hidden;
     .title {
         text-align: center;
         background-color: #2e2f32;
