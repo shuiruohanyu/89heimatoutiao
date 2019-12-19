@@ -80,9 +80,14 @@ export default {
             data: this.loginForm
           }).then(result => {
             window.localStorage.setItem('user-token', result.data.data.token) // 前端缓存令牌
+            this.$router.push('/home') // 跳转到主页
             //  成功以后才会进入到then
-          }).catch(error => {
-            console.log(error)
+          }).catch(() => {
+            // elementUI的方法
+            this.$message({
+              message: '您的手机号或者验证码不正确',
+              type: 'warning'
+            })
           })
         }
       })
