@@ -34,10 +34,12 @@ axios.interceptors.response.use(function (response) {
     // 如果同样的状态码 但是不同意思 => 需要通过 请求地址来判断是哪个的响应  请求地址 + 状态码 一起来判断 怎么处理
       // resfehtoken 过期 强制跳转到登录页 resfehtoken => 是用来换取 token的
       // this.$router => 路由实例对象
+      window.localStorage.removeItem('user-token') // 强制删除token
       router.push('/login')
       break
     case 401:
       // token过期
+      window.localStorage.removeItem('user-token') // 强制删除token
       router.push('/login') // 强制回登录
       break
     case 507:
