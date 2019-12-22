@@ -1,6 +1,6 @@
 <template>
   <!-- 卡片组件 -->
-  <el-card>
+  <el-card v-loading="loading">
     <!-- 面包屑给了卡片的具名插槽 -->
     <bread-crumb slot="header">
       <!-- 插槽内容 -->
@@ -43,6 +43,7 @@
 export default {
   data () {
     return {
+      loading: false, // 加载状态 默认关闭
       list: [],
       page: {
         // 专门放置分页数据
@@ -61,6 +62,8 @@ export default {
     },
     // 请求评论列表数据
     getComment () {
+      this.loading = true // 打开状态
+
       // axios 是默认是get类型
       // query 参数 / 路由参数 地址参数 get参数  axios  params
       // body参数 给 data
@@ -71,6 +74,8 @@ export default {
       }).then(result => {
         this.list = result.data.results // 获取评论列表数据给本身data
         this.page.total = result.data.total_count // 获取文章总条数
+        // setTimeout(() => { this.loading = false }, 300)
+        this.loading = false
       })
     },
     // 定义一个布尔值转化方法
@@ -88,7 +93,6 @@ export default {
       this.$confirm(`您是否确定要${mess}评论吗`).then(() => {
         // 用户确定要调用接口
         // 地址参数/query参数/url参数/路由参数 => 可以在params中写 也可以直接拼接到url地址上
-        debugger
         this.$axios({
           method: 'put',
           url: '/comments/status',
