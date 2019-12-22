@@ -60,11 +60,12 @@ export default {
       this.$confirm(`您是否确定要${mess}评论吗`).then(() => {
         // 用户确定要调用接口
         // 地址参数/query参数/url参数/路由参数 => 可以在params中写 也可以直接拼接到url地址上
+        debugger
         this.$axios({
           method: 'put',
           url: '/comments/status',
           params: {
-            article_id: row.id
+            article_id: row.id.toString()
           },
           data: {
             allow_comment: !row.comment_status
