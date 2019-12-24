@@ -17,7 +17,8 @@ axios.interceptors.request.use(function (config) {
 })
 // 后台数据 到达 响应拦截之前走的一个函数
 axios.defaults.transformResponse = [function (data) {
-  return JSONBig.parse(data) // JSONbig.parse 替换 JSON.parse  保证数字的正确
+  // data有可能是个空字符串  直接处理一下 保证这个地方不会报错
+  return data ? JSONBig.parse(data) : {} // JSONbig.parse 替换 JSON.parse  保证数字的正确
 }]
 // 响应拦截
 axios.interceptors.response.use(function (response) {
