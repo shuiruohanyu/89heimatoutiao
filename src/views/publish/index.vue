@@ -9,9 +9,9 @@
           <el-input v-model="formData.title" style="width:60%"></el-input>
         </el-form-item>
         <el-form-item  prop="content" label="内容">
-          <quill-editor style="height:400px;" v-model="formData.content" type='textarea' :rows="4"></quill-editor>
+          <quill-editor style="height:400px;" v-model="formData.content"  ></quill-editor>
         </el-form-item>
-        <el-form-item prop="type" label="封面" style="margin-top:100px">
+        <el-form-item label="封面" style="margin-top:100px">
           <!-- 单选组  v-model="封面类型" -->
           <el-radio-group v-model="formData.cover.type">
             <el-radio :label="1">单图</el-radio>
@@ -74,6 +74,9 @@ export default {
           }
         }
       }
+    },
+    'formData.cover.type': function () {
+      debugger
     }
   },
   methods: {
