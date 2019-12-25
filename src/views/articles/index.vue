@@ -13,7 +13,8 @@
               0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部
            -->
         <!-- 单选框组 -->
-        <el-radio-group @change="changeCondition" v-model="formData.status">
+        <!-- 第一种方式用  @change="changeCondition" 第二种方式 用watch-->
+        <el-radio-group  v-model="formData.status">
             <!-- 全部这个5是默认的,在传参的时候判断一下 是不是5 如果是5 就传个null -->
           <el-radio :label="5">全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
@@ -28,7 +29,9 @@
         <span>频道列表</span>
       </el-col>
       <el-col :span="18">
-        <el-select @change="changeCondition" v-model="formData.channel_id">
+                <!-- 第一种方式用  @change="changeCondition" 第二种方式 用watch-->
+
+        <el-select  v-model="formData.channel_id">
             <!-- 循环生成多个el-option
               label 指的是 el-option显示值
               value指的是 el-option的存储值
@@ -44,8 +47,8 @@
         <span>时间选择</span>
       </el-col>
       <el-col :span="18">
+         <!-- 第一种方式用  @change="changeCondition" 第二种方式 用watch-->
         <el-date-picker
-         @change="changeCondition"
           value-format="yyyy-MM-dd"
           v-model="formData.dateRange"
           type="daterange"
@@ -113,6 +116,15 @@ export default {
         pageSize: 10, // 文章列表最低10条
         total: 0
       }
+    }
+  },
+  watch: {
+    formData: {
+      handler () {
+        // this指向组件实例 // 触发该函数时 数据已经是最新的了
+        this.changeCondition()
+      },
+      deep: true // 深度检测
     }
   },
   filters: {
