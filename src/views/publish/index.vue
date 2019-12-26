@@ -9,7 +9,7 @@
           <el-input v-model="formData.title" style="width:60%"></el-input>
         </el-form-item>
         <el-form-item  prop="content" label="内容">
-          <quill-editor style="height:400px;" v-model="formData.content" type='textarea' :rows="4"></quill-editor>
+          <quill-editor style="height:400px;" v-model="formData.content"  ></quill-editor>
         </el-form-item>
         <el-form-item prop="type" label="封面" style="margin-top:140px">
           <!-- 单选组  v-model="封面类型" -->
