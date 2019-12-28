@@ -74,47 +74,42 @@ export default {
   },
   methods: {
     // 定义一个删除方法
-    delMaterial (id) {
-      this.$confirm('您确定要删除该素材吗').then(() => {
-        // 只有点击了确定 才会执行
-        // 调用删除接口
-        this.$axios({
-          url: `/user/images/${id}`,
-          method: 'delete'
-        }).then(() => {
-          // 重新拉取
-          this.getAllMaterial() // 重新加载数据
-        })
+    async delMaterial (id) {
+      await this.$confirm('您确定要删除该素材吗')
+      // 只有点击了确定 才会执行
+      // 调用删除接口
+      await this.$axios({
+        url: `/user/images/${id}`,
+        method: 'delete'
       })
+      // 重新拉取
+      this.getAllMaterial() // 重新加载数据
     },
     // 收藏或者取消收藏
-    collectOrCancel (row) {
+    async collectOrCancel (row) {
       // 调用 收藏或者取消收藏接口
-      this.$axios({
+      await this.$axios({
         url: `/user/images/${row.id}`,
         method: 'put',
         data: {
           collect: !row.is_collected // 状态取反 收藏 => 取消 取消 => 收藏
         }
-      }).then(() => {
-        // 成功一定进入到then
-        this.getAllMaterial() // 重新加载数据
       })
+      this.getAllMaterial() // 重新加载数据
     },
     //   上传图片
-    uploadImg (params) {
+    async uploadImg (params) {
       this.loading = true // 打开进度条
       let form = new FormData()
       form.append('image', params.file) // 添加文件到formData
-      this.$axios({
+      await this.$axios({
         method: 'post',
         url: '/user/images',
         data: form // formData数据
-      }).then(result => {
-        //   说明已经上传成功了一张图片
-        this.loading = false // 关闭进度条
-        this.getAllMaterial()
       })
+      //   说明已经上传成功了一张图片
+      this.loading = false // 关闭进度条
+      this.getAllMaterial()
     },
     //   切换分页
     changePage (newPage) {
@@ -127,19 +122,18 @@ export default {
       this.getAllMaterial()
     },
     //   获取所有素材/收藏
-    getAllMaterial () {
+    async getAllMaterial () {
       // all 所有 collect  收藏  this.activeName === "collect"
-      this.$axios({
+      let result = await this.$axios({
         url: '/user/images',
         params: {
           collect: this.activeName === 'collect',
           page: this.page.currentPage,
           per_page: this.page.pageSize
         }
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count //
       })
+      this.list = result.data.results
+      this.page.total = result.data.total_count //
     }
   },
   created () {

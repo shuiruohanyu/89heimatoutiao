@@ -61,22 +61,22 @@ export default {
       this.getComment()
     },
     // 请求评论列表数据
-    getComment () {
+    async getComment () {
       this.loading = true // 打开状态
 
       // axios 是默认是get类型
       // query 参数 / 路由参数 地址参数 get参数  axios  params
       // body参数 给 data
       // 身份信息 headers
-      this.$axios({
+      // await强制等待到 后面的promise执行完毕
+      let result = await this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
-      }).then(result => {
-        this.list = result.data.results // 获取评论列表数据给本身data
-        this.page.total = result.data.total_count // 获取文章总条数
-        // setTimeout(() => { this.loading = false }, 300)
-        this.loading = false
       })
+      this.list = result.data.results // 获取评论列表数据给本身data
+      this.page.total = result.data.total_count // 获取文章总条数
+      // setTimeout(() => { this.loading = false }, 300)
+      this.loading = false
     },
     // 定义一个布尔值转化方法
     formatterBool (row, column, cellValue, index) {
@@ -87,30 +87,28 @@ export default {
       return cellValue ? '正常' : '关闭'
     },
     // 打开或者关闭评论方法
-    openOrClose (row) {
+    async  openOrClose (row) {
       let mess = row.comment_status ? '关闭' : '打开'
       // $confirm 确定时  进入then 取消时进入catch
-      this.$confirm(`您是否确定要${mess}评论吗`).then(() => {
-        // 用户确定要调用接口
-        // 地址参数/query参数/url参数/路由参数 => 可以在params中写 也可以直接拼接到url地址上
-        this.$axios({
-          method: 'put',
-          url: '/comments/status',
-          params: {
-            article_id: row.id.toString()
-          },
-          data: {
-            allow_comment: !row.comment_status
-          }
-        }).then(result => {
-          // 打开或者关闭评论成功之后
-          this.$message({
-            type: 'success',
-            message: '操作成功'
-          })
-          this.getComment() // 重新请求列表
-        })
+      await this.$confirm(`您是否确定要${mess}评论吗`)
+      // 用户确定要调用接口
+      // 地址参数/query参数/url参数/路由参数 => 可以在params中写 也可以直接拼接到url地址上
+      await this.$axios({
+        method: 'put',
+        url: '/comments/status',
+        params: {
+          article_id: row.id.toString()
+        },
+        data: {
+          allow_comment: !row.comment_status
+        }
       })
+      // 打开或者关闭评论成功之后
+      this.$message({
+        type: 'success',
+        message: '操作成功'
+      })
+      this.getComment() // 重新请求列表
     }
   },
   created () {
