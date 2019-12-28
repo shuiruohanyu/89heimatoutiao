@@ -75,15 +75,19 @@ export default {
   methods: {
     // 定义一个删除方法
     async delMaterial (id) {
-      await this.$confirm('您确定要删除该素材吗')
-      // 只有点击了确定 才会执行
-      // 调用删除接口
-      await this.$axios({
-        url: `/user/images/${id}`,
-        method: 'delete'
-      })
-      // 重新拉取
-      this.getAllMaterial() // 重新加载数据
+      try {
+        await this.$confirm('您确定要删除该素材吗')
+        // 只有点击了确定 才会执行
+        // 调用删除接口
+        await this.$axios({
+          url: `/user/images/${id}`,
+          method: 'delete'
+        })
+        // 重新拉取
+        this.getAllMaterial() // 重新加载数据
+      } catch (error) {
+        // alert('取消了')
+      }
     },
     // 收藏或者取消收藏
     async collectOrCancel (row) {
