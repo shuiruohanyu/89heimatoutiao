@@ -1,7 +1,10 @@
 // 权限拦截 导航守卫
 import router from '../router'
+import progress from 'nprogress'
+import 'nprogress/nprogress.css'
 // 全局前置守卫
 router.beforeEach(function (to, from, next) {
+  progress.start() // 开启进度条
   // 拦截谁 判断拦截地址
   // 由于 某某框架升级了corejs版本 导致 字符串方式编译问题 判断 是否需要控制 先用不等于 login来判断
   if (to.path.startsWith('/home')) {
@@ -16,4 +19,10 @@ router.beforeEach(function (to, from, next) {
   } else {
     next() // 直接放行
   }
+})
+// afterEach 关闭
+
+router.afterEach(function () {
+  progress.done()
+  // setTimeout(() => progress.done(), 500) // 关闭进度条
 })
